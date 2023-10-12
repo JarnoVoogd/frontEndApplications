@@ -1,0 +1,6 @@
+# Set LF line endings for all files
+* text=auto
+
+# Exclude specific files from line ending conversion
+*.jpg binary
+*.png binary
