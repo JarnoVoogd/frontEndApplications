@@ -8,16 +8,16 @@
   let endFetch = 0;
 
   function fetchPeople(id) {
-  const url = `https://swapi.dev/api/people/${id}/`;
-  return fetch(url)
-    .then(response => {
-      if (response.status === 200) {
-        return response.json();
-      } else {
-        return null;
-      }
-    });
-}
+    const url = `https://swapi.dev/api/people/${id}/`;
+    return fetch(url)
+      .then(response => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          return null;
+        }
+      });
+  }
 
   onMount(() => {
     for (let i = 1; endFetch < 3 && i < 20; i++) {
