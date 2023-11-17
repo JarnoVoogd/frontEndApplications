@@ -87,17 +87,7 @@
 </script>
   
 <style>
-    /* Add your styling here if needed */
-    .tooltip {
-      position: absolute;
-      text-align: left;
-      padding: 6px;
-      font: 12px sans-serif;
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-      pointer-events: none;
-    }
+    
 </style>
   
 <svg id="pie-chart"></svg>
