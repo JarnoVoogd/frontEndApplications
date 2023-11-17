@@ -3,7 +3,18 @@
 </script>
 
 
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
 
-<ProcessData />
+<body>
+    <h1>Star Wars eye colors</h1>
+    <ProcessData />
+</body>
+
+<style>
+    body {
+      background-color: lightslategray; /* Set background color to black */
+      color: #fff; /* Set text color to white */
+      font-family: 'Roboto', sans-serif; /* Use a Star Wars-like font */
+      margin: 0; /* Remove default body margin */
+    }
+  </style>
+  
