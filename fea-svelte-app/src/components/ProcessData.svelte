@@ -14,7 +14,7 @@
     personenData.forEach((i) => {
       somPerSoort[i['eye_color']] = (somPerSoort[i['eye_color']] || 0) + 1;
     });
-
+    console.log(somPerSoort);
     // Prepare data for the bar and pie charts
     dataD3 = Object.keys(somPerSoort).map((key) => ({
       key,
@@ -24,10 +24,10 @@
 </script>
 
 
-<h1>Personen</h1>
+<!-- <h1>Personen</h1>
 {#each personenData as persoon}
   <p>{persoon.name}</p>
-{/each}
+{/each} -->
 <h2>Overzicht per oogkleur</h2>
 {#each Object.keys(somPerSoort) as oogkleur}
   <p>{oogkleur}: {somPerSoort[oogkleur]}</p>
