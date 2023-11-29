@@ -1,3 +1,5 @@
+<!-- fetchdata.svelte -->
+
 <script>
   import { onMount } from "svelte";
   import { createEventDispatcher } from "svelte";
@@ -20,7 +22,7 @@
   }
 
   onMount(() => {
-    for (let i = 1; endFetch < 3 && i < 50; i++) {
+    for (let i = 1; endFetch < 3 && i < 20; i++) {
       allFetches.push(fetchPeople(i).then(persoon => {
         if (persoon !== null) {
           return persoon; // Return the fetched data
