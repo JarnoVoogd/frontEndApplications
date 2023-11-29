@@ -3,6 +3,7 @@
 <script>
   import { onMount, afterUpdate } from 'svelte';
   import * as d3 from 'd3';
+  import { eyeColorScale } from './EyeColorScale.js';
 
   export let data;
 
@@ -44,17 +45,15 @@
 
     // Create a group element within the SVG and position it at the center
     svg
-      .append('g')
+    .append('g')
       .attr('transform', `translate(${radius},${radius})`)
-      // Bind the data to path elements, creating one path per data point
       .selectAll('path')
       .data(pie(data))
       .enter()
-      // For each data point, create a path using the arc function
       .append('path')
-      .attr('class', 'arc') // Class name changed to 'arc'
-      .attr('fill', (d, i) => d3.schemeCategory10[i]) // Use color scale as needed
-      // Add mouseover and mouseout event handlers
+      .attr('class', 'arc')
+      // Use the eyeColorScale mapping to determine the fill color
+      .attr('fill', (d) => eyeColorScale[d.data.key])
       .on('mouseover', handleMouseOver)
       .on('mouseout', handleMouseOut);
   }
@@ -66,20 +65,18 @@
 
     // Create a group element within the SVG and position it at the center
     const arcs = svg
-      .append('g')
+    .append('g')
       .attr('transform', `translate(${radius},${radius})`)
-      // Bind the updated data to path elements, creating one path per data point
       .selectAll('path')
       .data(pie(data))
       .enter()
-      // For each data point, create a path using the arc function
       .append('path')
-      .attr('class', 'arc') // Class name changed to 'arc'
-      .attr('fill', (d, i) => d3.schemeCategory10[i]) // Use color scale as needed
-      // Add mouseover and mouseout event handlers
+      .attr('class', 'arc')
+      // Use the eyeColorScale mapping to determine the fill color
+      .attr('fill', (d) => eyeColorScale[d.data.key])
       .on('mouseover', handleMouseOver)
       .on('mouseout', handleMouseOut);
-
+      
     // Calculate start and end angles for each data point
     const arcTween = (d) => {
       const i = d3.interpolate(currentData, d);

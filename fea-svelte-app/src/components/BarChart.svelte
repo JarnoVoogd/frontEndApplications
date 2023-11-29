@@ -1,6 +1,7 @@
 <script>
   import { onMount, afterUpdate } from 'svelte';
   import * as d3 from 'd3';
+  import { eyeColorScale } from './EyeColorScale.js';
 
   export let data;
 
@@ -73,7 +74,7 @@
     // Remove existing bars
     chart.selectAll('.bar').remove();
 
-    // Add new bars
+    // Add new bars with colors based on eyeColorScale mapping
     chart
       .selectAll('.bar')
       .data(data)
@@ -83,7 +84,8 @@
       .attr('x', 0)
       .attr('y', (d) => y(d.key))
       .attr('width', (d) => x(d.value))
-      .attr('height', y.bandwidth());
+      .attr('height', y.bandwidth())
+      .attr('fill', (d) => eyeColorScale[d.key]);
 
     // Update the y-axis and x-axis based on the updated scales
     chart.select('.y-axis').call(d3.axisLeft(y));
