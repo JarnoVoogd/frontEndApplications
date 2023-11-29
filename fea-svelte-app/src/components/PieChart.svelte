@@ -12,6 +12,9 @@
   let pie;
   let tooltip;
 
+  // Store the current data outside the component
+  let currentData;
+
   // Lifecycle hook: runs after the component is first mounted to the DOM
   onMount(() => {
     // Select the SVG container by ID
@@ -61,24 +64,36 @@
     // Select all path elements and bind the updated data
     const paths = svg.selectAll('.arc').data(pie(data));
 
+    // Calculate start and end angles for each data point
+    const arcTween = (d) => {
+      const i = d3.interpolate(currentData, d);
+      currentData = i(0);
+      return (t) => d3.arc().innerRadius(0).outerRadius(radius)(i(t));
+    };
+
     // Update existing paths with transition
     paths.transition()
       .duration(500)
-      .attr('d', d3.arc().innerRadius(0).outerRadius(radius))
+      .attrTween('d', arcTween)
       .attr('fill', (d, i) => d3.schemeCategory10[i]);
 
     // Remove paths that are no longer needed
     paths.exit().remove();
 
-    // Add new paths for new data points
-    paths.enter()
-      .append('path')
-      .attr('class', 'arc')
-      .attr('fill', (d, i) => d3.schemeCategory10[i])
-      .transition()
-      .duration(500)
-      .attr('d', d3.arc().innerRadius(0).outerRadius(radius));
+    // Function to create a path for each new data point
+    const enterPaths = (enter) => {
+      enter
+        .append('path')
+        .attr('class', 'arc')
+        .attr('fill', (d, i) => d3.schemeCategory10[i])
+        .each(function (d) { currentData = d; }) // Store the current data for interpolation
+        .transition()
+        .duration(500)
+        .attrTween('d', arcTween);
+    };
 
+    // Apply the enterPaths function to new data points
+    paths.enter().call(enterPaths);
   }
 
   // Event handler for mouseover events
