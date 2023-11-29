@@ -20,7 +20,7 @@
   }
 
   onMount(() => {
-    for (let i = 1; endFetch < 3 && i < 70; i++) {
+    for (let i = 1; endFetch < 3 && i < 50; i++) {
       allFetches.push(fetchPeople(i).then(persoon => {
         if (persoon !== null) {
           return persoon; // Return the fetched data
