@@ -61,8 +61,24 @@
 
   // Function to update the pie chart when the data changes
   function updatePieChart() {
-    // Select all path elements and bind the updated data
-    const paths = svg.selectAll('.arc').data(pie(data));
+    // Remove the existing paths
+    svg.selectAll('.arc').remove();
+
+    // Create a group element within the SVG and position it at the center
+    const arcs = svg
+      .append('g')
+      .attr('transform', `translate(${radius},${radius})`)
+      // Bind the updated data to path elements, creating one path per data point
+      .selectAll('path')
+      .data(pie(data))
+      .enter()
+      // For each data point, create a path using the arc function
+      .append('path')
+      .attr('class', 'arc') // Class name changed to 'arc'
+      .attr('fill', (d, i) => d3.schemeCategory10[i]) // Use color scale as needed
+      // Add mouseover and mouseout event handlers
+      .on('mouseover', handleMouseOver)
+      .on('mouseout', handleMouseOut);
 
     // Calculate start and end angles for each data point
     const arcTween = (d) => {
@@ -71,29 +87,10 @@
       return (t) => d3.arc().innerRadius(0).outerRadius(radius)(i(t));
     };
 
-    // Update existing paths with transition
-    paths.transition()
+    // Apply transition to the newly created paths
+    arcs.transition()
       .duration(500)
-      .attrTween('d', arcTween)
-      .attr('fill', (d, i) => d3.schemeCategory10[i]);
-
-    // Remove paths that are no longer needed
-    paths.exit().remove();
-
-    // Function to create a path for each new data point
-    const enterPaths = (enter) => {
-      enter
-        .append('path')
-        .attr('class', 'arc')
-        .attr('fill', (d, i) => d3.schemeCategory10[i])
-        .each(function (d) { currentData = d; }) // Store the current data for interpolation
-        .transition()
-        .duration(500)
-        .attrTween('d', arcTween);
-    };
-
-    // Apply the enterPaths function to new data points
-    paths.enter().call(enterPaths);
+      .attrTween('d', arcTween);
   }
 
   // Event handler for mouseover events
