@@ -13,29 +13,19 @@
 
     // Process the data and populate somPerSoort
     personenData.forEach((i) => {
+      // Replace 'blue-gray' with 'bluegray'
+      i['eye_color'] = i['eye_color']
+        .replace('blue-gray', 'bluegray')
+        .replace('unknown', 'silver');
+
       somPerSoort[i['eye_color']] = (somPerSoort[i['eye_color']] || 0) + 1;
-<<<<<<< Updated upstream
-=======
-<<<<<<< Updated upstream
-    });
-    console.log(somPerSoort);
-    // Prepare data for the bar and pie charts
-    dataD3 = Object.keys(somPerSoort).map((key) => ({
-=======
->>>>>>> Stashed changes
     })
   }
 
   // Watch for changes in filterValue and update dataD3 accordingly
   $: dataD3 = Object.keys(somPerSoort)
-<<<<<<< Updated upstream
-    .filter((key) => somPerSoort[key] > filterValue)
-    .map((key) => ({
-=======
     .filter((key) => somPerSoort[key] >= filterValue)
     .map((key) => ({
->>>>>>> Stashed changes
->>>>>>> Stashed changes
       key,
       value: somPerSoort[key],
     }));
