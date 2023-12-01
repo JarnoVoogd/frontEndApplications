@@ -1,13 +1,31 @@
+<!-- processdata.svelte -->
+
 <script>
+  // Import necessary components and functions from other files
   import FetchData from './FetchData.svelte';
   import BarChart from './BarChart.svelte';
   import PieChart from './PieChart.svelte';
+  import FilterRadio from './FilterRadio.svelte';
 
+  // Initialize variables to store data and filtering information
   let personenData = [];
   let somPerSoort = {};
   let dataD3 = [];
   let filterValue = 1; // Default filter value
 
+  // Function to handle filter data event from FilterRadio
+  function handleFilterData(event) {
+    const validColors = event.detail;
+    // Update the data based on the selected race
+    dataD3 = Object.keys(somPerSoort)
+      .filter((key) => validColors.includes(key))
+      .map((key) => ({
+        key,
+        value: somPerSoort[key],
+      }));
+  }
+
+  // Function to handle data loaded event from FetchData
   function handleDataLoaded(event) {
     personenData = event.detail;
 
@@ -30,34 +48,57 @@
       value: somPerSoort[key],
   }));
 
+  // Calculate the maximum eye color value for the filter slider
   $: maxEyeColorValue = Math.max(...dataD3.map(d => d.value));
 
 </script>
 
-<!-- Add the slider input and display the current value -->
-<h2>Filter Eye Colors</h2>
-<div class="slider-container">
-  <input type="range" bind:value={filterValue} min="1" max={maxEyeColorValue} />
-  <p>Filter Value: {filterValue}</p>
+<!-- HTML structure for the component -->
+<div class="container">
+  <!-- Add the slider input and display the current value -->
+  <h2>Filter Eye Colors</h2>
+  <div class="slider-container">
+    <div>
+      <!-- Bind the slider input to filterValue and call filterData on change -->
+      <input type="range" bind:value={filterValue} min="1" max={maxEyeColorValue} />
+      <FilterRadio on:filterData={handleFilterData} />
+    </div>
+    
+    <!-- Display the current value of the filter -->
+    <p>Filter Value: {filterValue}</p>
+  </div>
+
+  <!-- Check if there is data to display -->
+  {#if dataD3.length > 0}
+    <div class="chart-container">
+      <!-- Render BarChart and PieChart components with filtered data -->
+      <BarChart data={dataD3} />
+      <PieChart data={dataD3} />
+    </div>
+  {/if}
+
+  <h2>Overzicht per oogkleur</h2>
+  <!-- Display a summary of eye colors and their counts -->
+  {#each Object.keys(somPerSoort) as oogkleur}
+    <p>{oogkleur}: {somPerSoort[oogkleur]}</p>
+  {/each}
+
+  <!-- Fetch data from the API and trigger dataLoaded event -->
+  <FetchData on:dataLoaded={handleDataLoaded} />
 </div>
 
-<h2>Overzicht per oogkleur</h2>
-{#each Object.keys(somPerSoort) as oogkleur}
-  <p>{oogkleur}: {somPerSoort[oogkleur]}</p>
-{/each}
-
-{#if dataD3.length > 0}
-  <BarChart data={dataD3} />
-  <PieChart data={dataD3} />
-{/if}
-
-<FetchData on:dataLoaded={handleDataLoaded} />
 
 <style>
   .slider-container {
+    width: 50%;
     display: flex;
     align-items: center;
-    
+  }
+
+  .chart-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   input[type=range] {

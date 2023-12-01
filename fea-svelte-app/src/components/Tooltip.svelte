@@ -9,15 +9,17 @@
   
   <style>
     .tooltip {
-      position: absolute;
-      z-index: 9999;
-      background: none;
-      border: 1px solid #ccc;
-      padding: 10px;
-      font-size: 14px;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.3s;
+        top: 0;
+        right: 0;
+        position: absolute;
+        z-index: 9999;
+        background: none;
+        border: 1px solid #ccc;
+        padding: 10px;
+        font-size: 14px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s;
     }
   </style>
   
